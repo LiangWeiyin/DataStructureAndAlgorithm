@@ -2,7 +2,7 @@
 #include <cstdlib> // rand() srand() 
 #include <ctime>   // time() 
 #include <vector>
-#define  N 20
+#define  N 30
 using namespace std;
 
 // 归并排序
@@ -125,6 +125,43 @@ namespace test04 {
 	}
 };
 
+
+// 插入排序
+namespace test05 {
+	// 二分查找减少查找的时间
+	int lower_bound(vector<int>& nums, int right, int target) {
+		int left = 0;
+		int res = right;
+		while (left <= right) {
+			int mid = left + (right - left) / 2;
+			if (nums[mid] == target) {
+				res   = mid;
+				right = mid - 1;
+			}
+			else if (nums[mid] > target) {
+				res   = mid;
+				right = mid - 1; 
+			}
+			else if (nums[mid] < target) {
+				left  = mid + 1;
+			}
+		}
+		return res;
+	}	
+
+	void insert_sort(vector<int>& nums) {
+		int n = nums.size();
+		for (int i = 1; i < n; ++i) {
+			int val = nums[i];
+			int p = lower_bound(nums, i, val);
+			for (int j = i; j > p; --j) {
+				nums[j] = nums[j - 1];
+			}
+			nums[p] = val;
+		}
+	}
+}
+
 void init_arr(vector<int>& nums) {
 	for (int i = 0; i < nums.size(); ++i) {
 		nums[i] = 1 + (rand() % 100);
@@ -141,15 +178,17 @@ void print_arr(vector<int>& nums) {
 int main() {
 	srand(time(NULL));
 	vector<int> nums(N);
-	// 归并排序辅助数组
+	//归并排序辅助数组
 	vector<int> temp(N);
 
 	init_arr(nums);
 	print_arr(nums);
-	test01::merge_sort(nums, temp, 0, N - 1);
+	// test01::merge_sort(nums, temp, 0, N - 1);
 	// test02::quick_sort(nums, 0, N - 1);
 	// tese03::bubble_sort(nums);
 	// test04::select_sort(nums);
+	test05::insert_sort(nums);
 	print_arr(nums);
+
 	return 0;
 }
