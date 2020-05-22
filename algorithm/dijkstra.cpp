@@ -19,7 +19,7 @@ void init_graph(map<char, map<char, int> >& graph) {
 
 void init_distance(map<char, int>& distance, map<char, map<char, int> >& graph, char start) {
 	distance[start] = 0;
-	map<char, map<char, int> >::iterator ite;
+	map<char, map<char, int> >::iterator  ite;
 	for (ite = graph.begin(); ite != graph.end(); ++ite) {
 		if ((*ite).first != start) {
 			distance[(*ite).first] = inf;
@@ -28,13 +28,13 @@ void init_distance(map<char, int>& distance, map<char, map<char, int> >& graph, 
 }
 
 void init_parent(map<char, char>& parent, map<char, map<char, int> >& graph) {
-	map<char, map<char, int> >::iterator ite;
+	map<char, map<char, int> >::iterator  ite;
 	for (ite = graph.begin(); ite != graph.end(); ++ite) {
 		parent[(*ite).first] = '0';
 	}	
 }
 
-// 重写仿函数 小根堆
+// 仿函数 小根堆
 struct cmp {
 	bool operator()(pair<char, int>& a, pair<char, int>& b) {
 		return a.second > b.second;
@@ -64,7 +64,7 @@ void dijkstra(map<char, map<char, int> >& graph, map<char, char>& parent, map<ch
 			int  nextdist = dist + (*ite).second;
 			// 如果还没求出最短路径，并且 当前距离 比 之前求出的距离 还要短，则更新 距离 和 父节点
 			// 并将节点入队
-			if (seen.count(nextdist) == 0 && nextdist < distance[nextvert]) {
+			if (seen.count(nextvert) == 0 && nextdist < distance[nextvert]) {
 				parent[nextvert]   = vert;
 				distance[nextvert] = nextdist;
 				pqueue.push(make_pair(nextvert, nextdist));
@@ -74,7 +74,7 @@ void dijkstra(map<char, map<char, int> >& graph, map<char, char>& parent, map<ch
 }
 
 void print_distance(map<char, int>& distance) {
-	map<char, int>::iterator   ite;
+	map<char, int>::iterator    ite;
 	for (ite = distance.begin(); ite != distance.end(); ++ite) {
 		cout << (*ite).first << " " << (*ite).second << endl;
 	}
@@ -82,9 +82,10 @@ void print_distance(map<char, int>& distance) {
 }
 
 void print_path(map<char, char>& parent, char start) {
-	map<char, char>::iterator   ite;
-	stack<char> st;
+	// 利用栈输出最短路径
+	stack<char>                 st;
 
+	map<char, char>::iterator   ite;
 	for (ite = parent.begin(); ite != parent.end(); ++ite) {
 		char vert = (*ite).first;
 		if (vert != start) {
@@ -104,11 +105,11 @@ void print_path(map<char, char>& parent, char start) {
 }
 
 int main() {
-	// graph 存储点和边的关系
+	// graph[a][b]  得到 a b 之间的距离
 	map<char, map<char, int> > graph;
-	// 到达某节点的最短路径的前一个节点
+	// parent[a]    到达 a 的前一个节点
 	map<char, char>            parent;
-	// 到达某个节点的最短路径
+	// distance[a]  到达 a 的最短距离
 	map<char, int>             distance;
 	
 	// 源点 初始化
