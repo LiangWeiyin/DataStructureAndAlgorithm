@@ -11,8 +11,7 @@ void swap(vector<int>& nums, int i, int j) {
 	nums[j]  = temp;
 }
 
-// 从节点 i 向下做 heapify
-// 这里是大根堆
+// 从节点 i 向下做 heapify, 堆的大小为 n, n 不是 nums.size()
 void heapify(vector<int>& nums, int i, int n) {
 	if (i >= n) {
 		return ;
@@ -34,6 +33,9 @@ void heapify(vector<int>& nums, int i, int n) {
 	}
 }
 
+// 构建堆
+// 从最后一个叶子节点开始做heapify, 一层做完之后再往上
+// 确保子树已经是堆
 void build_heap(vector<int>& nums) {
 	int n = nums.size();
 	int last_node = n - 1;
@@ -51,7 +53,7 @@ void heap_sort(vector<int>& nums) {
 	for (int i = n - 1; i >= 0; --i) {
 		// 把堆顶元素拿到"最后"
 		swap(nums, 0, i);
-		// 重新调整堆
+		// 将堆的大小减 1, 重新调整堆
 		heapify(nums, 0, i);
 	}
 }
